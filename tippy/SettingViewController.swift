@@ -10,10 +10,23 @@ import UIKit
 
 class SettingViewController: UIViewController {
 
+    
+    @IBOutlet weak var tipSettingControl: UISegmentedControl!
+    @IBOutlet weak var setNoOfPersonText: UITextField!
+    
+    @IBOutlet weak var errorMessage: UILabel!
+    
+    @IBOutlet var secondPAgeView: UIView!
+    
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        errorMessage.text = ""
         // Do any additional setup after loading the view.
+        // view.backgroundColor = UIColor.blue
+        tipSettingControl.selectedSegmentIndex = defaults.integer(forKey: "selectedSegmentNumber")
+        defaults.synchronize()
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,6 +34,16 @@ class SettingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func updateMaxPersonButton(_ sender: Any) {
+        if(Float(setNoOfPersonText.text!)==0 || Float(setNoOfPersonText.text!)==1) {
+            errorMessage.text = "The maximum value cannot be 0 or 1"
+        } else {
+            defaults.set(Float(setNoOfPersonText.text!), forKey: "maxNumberOfPerson")
+            defaults.synchronize()
+            errorMessage.text = "";
+        }
+        
+    }
 
     /*
     // MARK: - Navigation
@@ -31,5 +54,11 @@ class SettingViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func onChange(_ sender: Any) {
+        defaults.set(tipSettingControl.selectedSegmentIndex, forKey: "selectedSegmentNumber")
+        defaults.synchronize()
+    }
+    
 
 }
